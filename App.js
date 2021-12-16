@@ -73,7 +73,7 @@ function Index() {
   const [login, { loading, error }] = useMutation(LOGIN_USER, {
     onCompleted({ login }) {
       if (login) {
-        console.log(login);
+        console.log("LOGIN RESPONSE", login);
       }
       dispatch({
         type: "LOGIN",
@@ -86,6 +86,13 @@ function Index() {
 
   if (loading) return <Text>"Loading..."</Text>;
 
+  const logout = async () => {
+    AsyncStorage.clear();
+    dispatch({
+      type: "LOGOUT",
+    });
+  };
+
   return (
     <>
       <Text>AuthContext Demo</Text>
@@ -97,6 +104,11 @@ function Index() {
       <Button onPress={login} title="LOGIN">
         <Text bold size={14}>
           LOGIN
+        </Text>
+      </Button>
+      <Button onPress={logout} title="LOGOUT">
+        <Text bold size={14}>
+          LOGOUT
         </Text>
       </Button>
     </>

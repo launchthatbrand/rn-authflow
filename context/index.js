@@ -11,9 +11,11 @@ const Context = createContext();
 
 // root reducer
 const rootReducer = (state, action) => {
+  console.log("pinned dispatched", action);
   switch (action.type) {
     case "LOGIN":
       return { ...state, user: action.payload };
+      console.log("login");
     case "LOGOUT":
       return { ...state, user: null };
     default:
@@ -26,6 +28,10 @@ const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(rootReducer, intialState);
 
   useEffect(() => {
+    console.log("state_data", state);
+  }, [state]);
+
+  useEffect(() => {
     const asyncFunctionData = async () => {
       try {
         const storageData = await AsyncStorage.getItem("login");
@@ -33,7 +39,7 @@ const AuthProvider = ({ children }) => {
           type: "LOGIN",
           payload: JSON.parse(storageData),
         });
-        console.log("local_data", storageData);
+        console.log("AsyncStorage", JSON.parse(storageData));
       } catch (e) {}
     };
     asyncFunctionData();

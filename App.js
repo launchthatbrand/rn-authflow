@@ -11,6 +11,7 @@ import {
 } from "@apollo/client";
 
 import { AuthProvider, Context } from "./context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const client = new ApolloClient({
   uri: "https://wordpress-360386-2306631.cloudwaysapps.com/graphql",
@@ -78,6 +79,8 @@ function Index() {
         type: "LOGIN",
         payload: login,
       });
+      // save in local
+      AsyncStorage.setItem("login", JSON.stringify(login));
     },
   });
 

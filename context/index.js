@@ -1,4 +1,5 @@
-import React, { useReducer, createContext, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useReducer, createContext, useEffect, useState } from "react";
 
 // initial state
 const intialState = {
@@ -23,6 +24,20 @@ const rootReducer = (state, action) => {
 // context provider
 const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(rootReducer, intialState);
+
+  useEffect(() => {
+    const asyncFunctionData = async () => {
+      try {
+        const storageData = await AsyncStorage.getItem("login");
+        dispatch({
+          type: "LOGIN",
+          payload: JSON.parse(storageData),
+        });
+        console.log("local_data", storageData);
+      } catch (e) {}
+    };
+    asyncFunctionData();
+  }, [dispatch]);
 
   return (
     <Context.Provider value={{ state, dispatch }}>{children}</Context.Provider>

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import {
   ApolloClient,
@@ -10,12 +10,14 @@ import {
   useMutation,
 } from "@apollo/client";
 
+import { AuthProvider, Context } from "./context";
+
 const client = new ApolloClient({
   uri: "https://wordpress-360386-2306631.cloudwaysapps.com/graphql",
   cache: new InMemoryCache(),
 });
 
-const LOGIN = gql`
+const LOGIN_USER = gql`
   mutation LoginUser {
     login(
       input: {
@@ -63,15 +65,33 @@ const GET_COURSES = gql`
 `;
 
 function Index() {
-  const [mutateFunction, { data, loading, error }] = useMutation(LOGIN);
+  //access to state
+  const { state, dispatch } = useContext(Context);
+
+  // Login mutation with onCompleted saving data to AuthContext
+  const [login, { loading, error }] = useMutation(LOGIN_USER, {
+    onCompleted({ login }) {
+      if (login) {
+        console.log(login);
+      }
+      dispatch({
+        type: "LOGIN",
+        payload: login,
+      });
+    },
+  });
+
   if (loading) return <Text>"Loading..."</Text>;
-  console.log(data);
 
   return (
     <>
       <Text>AuthContext Demo</Text>
-      <Text>{data?.login.authToken}</Text>
-      <Button onPress={mutateFunction} title="LOGIN">
+      <Text>{state?.user?.authToken}</Text>
+      <Text>{state?.user?.user?.userId}</Text>
+      <Text>{state?.user?.user?.name}</Text>
+      <Text>{state?.user?.user?.email}</Text>
+
+      <Button onPress={login} title="LOGIN">
         <Text bold size={14}>
           LOGIN
         </Text>
@@ -82,12 +102,14 @@ function Index() {
 
 export default function App() {
   return (
-    <ApolloProvider client={client}>
-      <View style={styles.container}>
-        <Index />
-        <StatusBar style="auto" />
-      </View>
-    </ApolloProvider>
+    <AuthProvider>
+      <ApolloProvider client={client}>
+        <View style={styles.container}>
+          <Index />
+          <StatusBar style="auto" />
+        </View>
+      </ApolloProvider>
+    </AuthProvider>
   );
 }
 

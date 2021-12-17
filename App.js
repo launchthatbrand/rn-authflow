@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useContext } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { Button, Input, Image } from "react-native-elements";
 import {
   ApolloClient,
   ApolloProvider,
@@ -12,6 +13,15 @@ import {
 
 import { AuthProvider, Context } from "./context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import LoginScreen from "./screens/LoginScreen";
+import HomeScreen from "./screens/HomeScreen";
+import Screens from "./navigation/Screens";
+
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+const Stack = createNativeStackNavigator();
 
 const client = new ApolloClient({
   uri: "https://wordpress-360386-2306631.cloudwaysapps.com/graphql",
@@ -118,12 +128,13 @@ function Index() {
 export default function App() {
   return (
     <AuthProvider>
-      <ApolloProvider client={client}>
-        <View style={styles.container}>
-          <Index />
-          <StatusBar style="auto" />
-        </View>
-      </ApolloProvider>
+      <NavigationContainer>
+        <ApolloProvider client={client}>
+          <View flex>
+            <Screens />
+          </View>
+        </ApolloProvider>
+      </NavigationContainer>
     </AuthProvider>
   );
 }

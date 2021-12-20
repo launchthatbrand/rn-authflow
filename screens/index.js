@@ -1,24 +1,20 @@
-import OnboardingScreen from "./Onboarding";
+import LoginScreen from "./LoginScreen";
 import HomeScreen from "./HomeScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from "react";
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 function AppStack(props) {
   return (
-    <Stack.Navigator mode="card" headerMode="none">
+    <Stack.Navigator mode="card">
       <Stack.Screen
-        name="OnboardingScreen"
-        component={OnboardingScreen}
-        option={{
-          headerTransparent: true,
-        }}
+        name="LoginScreen"
+        component={LoginScreen}
       />
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
-        option={{
-          headerTransparent: true,
-        }}
       />
     </Stack.Navigator>
   );

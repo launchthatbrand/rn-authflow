@@ -1,13 +1,41 @@
 //import liraries
-import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { Component, useContext } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  KeyboardAvoidingView,
+  ScrollView,
+} from "react-native";
+import { Button, Input, Image } from "react-native-elements";
+import { StatusBar } from "expo-status-bar";
+import { Context } from "../context";
 
 // create a component
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
+  //access to state
+  const { state, dispatch } = useContext(Context);
+
   return (
-    <View style={styles.container}>
-      <Text>HomeScreen</Text>
-    </View>
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1 }}
+      keyboardShouldPersistTaps="handled"
+    >
+      <KeyboardAvoidingView behavior="padding" style={styles.container}>
+        <View style={styles.inputContainer}>
+          <Text>{state?.user?.authToken}</Text>
+          <Text>{state?.user?.user?.userId}</Text>
+          <Text>{state?.user?.user?.name}</Text>
+          <Text>{state?.user?.user?.email}</Text>
+          <Button
+            containerStyle={styles.button}
+            onPress={() => navigation.navigate("LoginScreen")}
+            title="Logout"
+          />
+          <View style={{ height: 100 }}></View>
+        </View>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
@@ -15,9 +43,16 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#2c3e50",
+    justifyContent: "center",
+    padding: 10,
+    backgroundColor: "white",
+  },
+  inputContainer: {
+    width: 300,
+  },
+  button: {
+    marginTop: 10,
   },
 });
 

@@ -14,14 +14,10 @@ import {
 import { AuthProvider, Context } from "./context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import LoginScreen from "./screens/LoginScreen";
-import HomeScreen from "./screens/HomeScreen";
-import Screens from "./navigation/Screens";
+import Screens from "./screens";
 
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-const Stack = createNativeStackNavigator();
 
 const client = new ApolloClient({
   uri: "https://wordpress-360386-2306631.cloudwaysapps.com/graphql",
@@ -130,9 +126,7 @@ export default function App() {
     <AuthProvider>
       <NavigationContainer>
         <ApolloProvider client={client}>
-          <View flex>
-            <Screens />
-          </View>
+          <Screens />
         </ApolloProvider>
       </NavigationContainer>
     </AuthProvider>
